@@ -12,12 +12,16 @@ class CancelledTaskScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-             UserProfileBanner(onTap: () { Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const UpdateProfileScreen(),
-              ),
-            );  },),
+            UserProfileBanner(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateProfileScreen(),
+                  ),
+                );
+              },
+            ),
             Expanded(
               child: ListView.separated(
                 itemCount: 20,
