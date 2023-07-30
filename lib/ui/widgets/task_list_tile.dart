@@ -25,14 +25,14 @@ class TaskListTile extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.teal,
                 ),
                 const Spacer(),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.edit,
-                    color: Colors.green,
+                    color: Colors.green.shade500,
                   ),
                 ),
                 IconButton(

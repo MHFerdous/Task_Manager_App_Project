@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 24,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _emailTEController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
@@ -105,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 12,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.done,
                       controller: _passwordTEController,
                       obscureText: true,
                       decoration: const InputDecoration(

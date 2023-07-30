@@ -49,6 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     height: 24,
                   ),
                   TextFormField(
+                    textInputAction: TextInputAction.next,
                     controller: _passwordTEController,
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -68,6 +69,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     height: 12,
                   ),
                   TextFormField(
+                    textInputAction: TextInputAction.done,
                     controller: _confirmPasswordTEController,
                     obscureText: true,
                     decoration: const InputDecoration(

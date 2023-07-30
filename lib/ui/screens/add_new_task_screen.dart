@@ -93,6 +93,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         height: 24,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.next,
                         controller: _titleTEController,
                         decoration: const InputDecoration(hintText: 'Title'),
                         validator: (String? value) {
@@ -106,6 +107,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         height: 12,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.done,
                         controller: _descriptionTEController,
                         maxLines: 4,
                         decoration:

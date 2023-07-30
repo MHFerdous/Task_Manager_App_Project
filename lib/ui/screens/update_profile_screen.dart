@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
 
+import '../../data/models/auth_utility.dart';
+import 'auth/login_screen.dart';
+
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
 
@@ -72,6 +75,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.next,
                         controller: _emailTEController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
@@ -92,7 +96,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       const SizedBox(
                         height: 12,
                       ),
-                      TextFormField(
+                      TextFormField(textInputAction: TextInputAction.next,
                         controller: _firstNameTEController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
@@ -109,6 +113,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 12,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.next,
                         controller: _lastNameTEController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
@@ -125,6 +130,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 12,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.next,
                         controller: _phoneTEController,
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
@@ -144,6 +150,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 12,
                       ),
                       TextFormField(
+                        textInputAction: TextInputAction.done,
                         controller: _passwordTEController,
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -166,13 +173,34 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            /*if (!_formKey.currentState!.validate()) {
+                            if (!_formKey.currentState!.validate()) {
                               return;
-                            }*/
+                            }
                           },
                           child: const Icon(Icons.arrow_forward_ios_outlined),
                         ),
                       ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 42,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await AuthUtility.clearUserInfo();
+                            if (mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                  (route) => false);
+                            }
+                          },
+                          child: const Text('Logout'),
+                        ),
+                      )
                     ],
                   ),
                 ),

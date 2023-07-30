@@ -88,6 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 24,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _emailTEController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
@@ -109,6 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 12,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _firstNameTEController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
@@ -125,6 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 12,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _lastNameTEController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
@@ -141,6 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 12,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.next,
                       controller: _phoneTEController,
                       keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
@@ -160,6 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 12,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.done,
                       controller: _passwordTEController,
                       obscureText: true,
                       decoration: const InputDecoration(

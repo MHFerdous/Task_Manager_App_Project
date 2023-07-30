@@ -17,7 +17,7 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
       title: 'Task Manager',
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.teal,
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
