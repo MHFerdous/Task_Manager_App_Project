@@ -16,12 +16,17 @@ class NetworkCaller {
           'token': AuthUtility.userInfo.token.toString(),
         },
       );
+      log(response.statusCode.toString());
+      log(response.body.toString());
+
       if (response.statusCode == 200) {
         return NetworkResponse(
           true,
           response.statusCode,
           jsonDecode(response.body),
         );
+      } else if (response.statusCode == 401) {
+        gotoLogin();
       } else {
         return NetworkResponse(false, response.statusCode, null);
       }
@@ -69,7 +74,7 @@ class NetworkCaller {
   void gotoLogin() async {
     await AuthUtility.clearUserInfo();
     Navigator.pushAndRemoveUntil(
-        TaskManagerApp.globalKey.currentState!.context,
+        TaskManagerApp.globalKey.currentContext!,
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         ),
