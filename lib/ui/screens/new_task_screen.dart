@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/network_response.dart';
 import 'package:mobile_application/data/models/summary_count_model.dart';
+import 'package:mobile_application/data/models/task_list_model.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
 import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
@@ -17,14 +18,17 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
-  bool _getCountSummaryInProgress = false;
+  bool _getCountSummaryInProgress = false, _getNewTaskInProgress = false;
 
   SummaryCountModel _summaryCountModel = SummaryCountModel();
+  TaskListModel _taskListModel = TaskListModel();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getCountSummary();
+      getNewTask();
     });
   }
 
@@ -47,6 +51,30 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       }
     }
     _getCountSummaryInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> getNewTask() async {
+    _getNewTaskInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.newTask);
+    if (response.isSuccess) {
+      _taskListModel = TaskListModel.fromJson(response.body!);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to load new task'),
+          ),
+        );
+      }
+    }
+    _getNewTaskInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -103,7 +131,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             Expanded(
               child: ListView.separated(
-                itemCount: 20,
+                itemCount: _taskListModel.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   return const TaskListTile();
                 },
