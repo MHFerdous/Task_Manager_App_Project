@@ -130,17 +130,28 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     ),
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: _taskListModel.data?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return const TaskListTile();
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  getNewTask();
                 },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    color: Colors.grey,
-                    height: 4,
-                  );
-                },
+                child: _getNewTaskInProgress
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.separated(
+                        itemCount: _taskListModel.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return TaskListTile(
+                            data: _taskListModel.data![index],
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(
+                            color: Colors.grey,
+                            height: 4,
+                          );
+                        },
+                      ),
               ),
             )
           ],

@@ -12,18 +12,18 @@ class TaskListTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
-        title: Text(data.title!),
+        title: Text(data.title ?? 'Unknown'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(data.description!),
-            Text(data.createdDate!),
+            Text(data.description ?? ''),
+            Text(data.createdDate ?? ''),
             Row(
               children: [
-                const Chip(
+                 Chip(
                   label: Text(
-                    'New',
-                    style: TextStyle(
+                    data.status ?? 'New',
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
