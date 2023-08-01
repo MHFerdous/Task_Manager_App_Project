@@ -33,15 +33,15 @@ class _LoginScreenState extends State<LoginScreen> {
       "email": _emailTEController.text.trim(),
       "password": _passwordTEController.text
     };
-    final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.login, requestBody);
+    final NetworkResponse response = await NetworkCaller()
+        .postRequest(Urls.login, requestBody, isLogin: true);
     _logInInProgress = false;
     if (mounted) {
       setState(() {});
     }
     if (response.isSuccess) {
       LoginModel model = LoginModel.fromJson(response.body!);
-     await AuthUtility.saveUserInfo(model);
+      await AuthUtility.saveUserInfo(model);
       if (mounted) {
         Navigator.pushAndRemoveUntil(
             context,
