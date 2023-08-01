@@ -1,17 +1,17 @@
 class SummaryCountModel {
   String? status;
-  List<Data>? data;
+  List<SummaryData>? data;
 
   SummaryCountModel({this.status, this.data});
 
   SummaryCountModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <SummaryData>[];
       json['data'].forEach(
         (v) {
           data!.add(
-            Data.fromJson(v),
+            SummaryData.fromJson(v),
           );
         },
       );
@@ -28,13 +28,13 @@ class SummaryCountModel {
   }
 }
 
-class Data {
+class SummaryData {
   String? sId;
   int? sum;
 
-  Data({this.sId, this.sum});
+  SummaryData({this.sId, this.sum});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  SummaryData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     sum = json['sum'];
   }

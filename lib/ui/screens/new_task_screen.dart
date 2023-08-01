@@ -21,6 +21,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getCountSummaryInProgress = false, _getNewTaskInProgress = false;
 
   SummaryCountModel _summaryCountModel = SummaryCountModel();
+
   TaskListModel _taskListModel = TaskListModel();
 
   @override
@@ -96,39 +97,30 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 );
               },
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _getCountSummaryInProgress
-                  ? const LinearProgressIndicator()
-                  : const Row(
-                      children: [
-                        Expanded(
-                          child: SummaryCard(
-                            number: 69,
-                            title: 'New',
-                          ),
-                        ),
-                        Expanded(
-                          child: SummaryCard(
-                            number: 69,
-                            title: 'Progress',
-                          ),
-                        ),
-                        Expanded(
-                          child: SummaryCard(
-                            number: 69,
-                            title: 'Cancelled',
-                          ),
-                        ),
-                        Expanded(
-                          child: SummaryCard(
-                            number: 69,
-                            title: 'Completed',
-                          ),
-                        ),
-                      ],
+            _getCountSummaryInProgress
+                ? const LinearProgressIndicator()
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 70,
+                      width: double.infinity,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _summaryCountModel.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return SummaryCard(
+                            title: _summaryCountModel.data![index].sId ?? 'New',
+                            number: _summaryCountModel.data![index].sum ?? 0,
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(
+                            height: 4,
+                          );
+                        },
+                      ),
                     ),
-            ),
+                  ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
