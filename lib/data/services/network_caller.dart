@@ -17,8 +17,7 @@ class NetworkCaller {
         },
       );
       log(response.statusCode.toString());
-      log(response.body.toString());
-
+      log(response.body);
       if (response.statusCode == 200) {
         return NetworkResponse(
           true,
@@ -31,9 +30,7 @@ class NetworkCaller {
         return NetworkResponse(false, response.statusCode, null);
       }
     } catch (e) {
-      log(
-        e.toString(),
-      );
+      log(e.toString());
     }
     return NetworkResponse(false, -1, null);
   }
@@ -45,13 +42,12 @@ class NetworkCaller {
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'token': AuthUtility.userInfo.token.toString(),
+          'token': AuthUtility.userInfo.token.toString()
         },
         body: jsonEncode(body),
       );
       log(response.statusCode.toString());
-      log(response.body.toString());
-
+      log(response.body);
       if (response.statusCode == 200) {
         return NetworkResponse(
           true,
@@ -66,14 +62,12 @@ class NetworkCaller {
         return NetworkResponse(false, response.statusCode, null);
       }
     } catch (e) {
-      log(
-        e.toString(),
-      );
+      log(e.toString());
     }
     return NetworkResponse(false, -1, null);
   }
 
-  void gotoLogin() async {
+  Future<void> gotoLogin() async {
     await AuthUtility.clearUserInfo();
     Navigator.pushAndRemoveUntil(
         TaskManagerApp.globalKey.currentContext!,

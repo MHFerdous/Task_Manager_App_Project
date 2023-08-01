@@ -1,10 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_application/data/models/task_list_model.dart';
 import 'package:mobile_application/ui/screens/update_profile_screen.dart';
+import '../../data/models/network_response.dart';
+import '../../data/services/network_caller.dart';
+import '../../data/utils/urls.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_banner.dart';
 
-class CompletedTaskScreen extends StatelessWidget {
+class CompletedTaskScreen extends StatefulWidget {
   const CompletedTaskScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CompletedTaskScreen> createState() => _CompletedTaskScreenState();
+}
+
+class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
+  bool _getProgressTaskCompleted = false;
+
+  TaskListModel _taskListModel = TaskListModel();
+
+  Future<void> getCompletedTasks() async {
+    _getProgressTaskCompleted = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.cancelledTask);
+    if (response.isSuccess) {
+      _taskListModel = TaskListModel.fromJson(response.body!);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to load in progress task'),
+          ),
+        );
+      }
+    }
+    _getProgressTaskCompleted = false;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        getCompletedTasks();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,25 +59,34 @@ class CompletedTaskScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-             UserProfileBanner(onTap: () { Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const UpdateProfileScreen(),
-              ),
-            );  },),
+            UserProfileBanner(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateProfileScreen(),
+                  ),
+                );
+              },
+            ),
             Expanded(
-              child: ListView.separated(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return SizedBox(height: 1,);
-                  // const TaskListTile();
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    height: 4,
-                  );
-                },
-              ),
+              child: _getProgressTaskCompleted
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.separated(
+                      itemCount: _taskListModel.data?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return TaskListTile(
+                          data: _taskListModel.data![index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(
+                          height: 4,
+                        );
+                      },
+                    ),
             )
           ],
         ),
