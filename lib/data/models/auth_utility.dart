@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:mobile_application/data/models/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'login_model.dart';
 
 class AuthUtility {
   AuthUtility._();
@@ -34,7 +34,7 @@ class AuthUtility {
     SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
     bool isLogin = _sharedPrefs.containsKey('user-data');
     if (isLogin) {
-      await getUserInfo();
+      userInfo = await getUserInfo();
     }
     return isLogin;
   }

@@ -1,18 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_application/data/models/network_response.dart';
+import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/ui/screens/auth/otp_verification_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
+import '../../data/utils/urls.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({Key? key}) : super(key: key);
 
   @override
-  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
+  State<EmailVerificationScreen> createState() =>
+      _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
-
   final TextEditingController _emailTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _emailVerificationInProgress = false;
+
+  Future<void> getVerifiedEmail() async {
+    _emailVerificationInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final NetworkResponse response = await NetworkCaller().getRequest(
+      Urls.emailVerification(
+        _emailTEController.text.trim(),
+      ),
+    );
+    _emailVerificationInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OtpVerificationScreen(),
+          ),
+        );
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Incorrect email'),
+            ),
+          );
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +96,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         return 'Please enter your email';
                       }
                       if (!RegExp(
-                          r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value!)) {
                         return 'Enter a valid email';
                       }
@@ -69,19 +108,20 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                       /* if (!_formKey.currentState!.validate()) {
-                          return;
-                        }*/
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OtpVerificationScreen(),
-                          ),
-                        );
-                      },
-                      child: const Icon(Icons.arrow_forward_ios_outlined),
+                    child: Visibility(
+                      visible: _emailVerificationInProgress == false,
+                      replacement: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          getVerifiedEmail();
+                        },
+                        child: const Icon(Icons.arrow_forward_ios_outlined),
+                      ),
                     ),
                   ),
                   const SizedBox(

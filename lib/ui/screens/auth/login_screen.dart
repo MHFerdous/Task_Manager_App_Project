@@ -126,8 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       child: Visibility(
                         visible: _logInInProgress == false,
-                        replacement:
-                            const Center(child: CircularProgressIndicator()),
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                         child: ElevatedButton(
                           onPressed: () {
                             if (!_formKey.currentState!.validate()) {

@@ -1,5 +1,5 @@
 class Urls {
-  Urls._();
+  //Urls._();
   static const String _baseUrl = 'https://task.teamrabbil.com/api/v1';
   static String registration = '$_baseUrl/registration';
   static String login = '$_baseUrl/login';
@@ -9,4 +9,5 @@ class Urls {
   static String inProgressTask = '$_baseUrl/ListTaskByStatus/Progress';
   static String cancelledTask = '$_baseUrl/ListTaskByStatus/Cancelled';
   static String completedTask = '$_baseUrl/ListTaskByStatus/Completed';
+  static String emailVerification(String email) => '$_baseUrl/ListTaskByStatus/RecoverVerifyEmail/rabbilidlc@gmail.com';
 }
