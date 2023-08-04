@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
-
 import '../../data/models/auth_utility.dart';
 import 'auth/login_screen.dart';
 
@@ -96,7 +95,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       const SizedBox(
                         height: 12,
                       ),
-                      TextFormField(textInputAction: TextInputAction.next,
+                      TextFormField(
+                        textInputAction: TextInputAction.next,
                         controller: _firstNameTEController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
