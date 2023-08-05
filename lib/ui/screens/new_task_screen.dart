@@ -7,6 +7,7 @@ import 'package:mobile_application/data/utils/urls.dart';
 import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
 import 'package:mobile_application/ui/screens/update_profile_screen.dart';
 import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
+import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_banner.dart';
@@ -102,6 +103,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,7 +163,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               deleteTask(_taskListModel.data![index].sId!);
                             },
                             onEditTap: () {
-                              showEditBottomSheet(_taskListModel.data![index]);
+                              //showEditBottomSheet(_taskListModel.data![index]);
+                              showStatueUpdateBottomSheet(
+                                  _taskListModel.data![index]);
                             },
                           );
                         },
@@ -195,9 +200,27 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return UpdateTaskBottomSheet(task: task, onUpdate: () {
-          getNewTask();
-        },);
+        return UpdateTaskBottomSheet(
+          task: task,
+          onUpdate: () {
+            getNewTask();
+          },
+        );
+      },
+    );
+  }
+
+  void showStatueUpdateBottomSheet(TaskData task) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return UpdateTaskStatusSheet(
+          task: task,
+          onUpdate: () {
+            getNewTask();
+          },
+        );
       },
     );
   }
