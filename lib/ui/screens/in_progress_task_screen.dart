@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
+import 'package:mobile_application/ui/widgets/screen_background.dart';
 import '../../data/models/network_response.dart';
 import '../../data/services/network_caller.dart';
 import '../../data/utils/urls.dart';
@@ -16,11 +17,13 @@ class InProgressTaskScreen extends StatefulWidget {
 class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
   bool _getProgressTasksInProgress = false;
   TaskListModel _taskListModel = TaskListModel();
+
   Future<void> getInProgressTasks() async {
     _getProgressTasksInProgress = true;
     if (mounted) {
       setState(() {});
     }
+
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.inProgressTask);
     if (response.isSuccess) {
@@ -40,25 +43,25 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
     }
   }
 
-  Future<void> deleteTask(String taskId) async {
-    final NetworkResponse response = await NetworkCaller().getRequest(
-      Urls.deleteTask(taskId),
-    );
-    if (response.isSuccess) {
-      _taskListModel.data!.removeWhere((element) => element.sId == taskId);
-      if (mounted) {
-        setState(() {});
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Task deletion failed'),
-          ),
-        );
-      }
-    }
-  }
+  // Future<void> deleteTask(String taskId) async {
+  //   final NetworkResponse response = await NetworkCaller().getRequest(
+  //     Urls.deleteTask(taskId),
+  //   );
+  //   if (response.isSuccess) {
+  //     _taskListModel.data!.removeWhere((element) => element.sId == taskId);
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   } else {
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Task deletion failed'),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
@@ -73,7 +76,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: ScreenBackground(
         child: Column(
           children: [
             const UserProfileBanner(),
@@ -87,9 +90,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
                       itemBuilder: (context, index) {
                         return TaskListTile(
                           data: _taskListModel.data![index],
-                          onDeleteTap: () {
-                            deleteTask(_taskListModel.data![index].sId!);
-                          },
+                          onDeleteTap: () {},
                           onEditTap: () {},
                         );
                       },
