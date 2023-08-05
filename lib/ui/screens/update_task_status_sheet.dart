@@ -16,7 +16,12 @@ class UpdateTaskStatusSheet extends StatefulWidget {
 }
 
 class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
-  List<String> taskStatusList = ['New', 'In Progress', 'Cancelled', 'Completed'];
+  List<String> taskStatusList = [
+    'New',
+    'In Progress',
+    'Cancelled',
+    'Completed'
+  ];
   late String _selectedTask;
   bool updateTaskInProgress = false;
 
@@ -57,13 +62,20 @@ class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 500,
+      height: 400,
       child: Column(
         children: [
           const Padding(
             padding: EdgeInsets.all(16),
-            child: Text('Update Status'),
+            child: Text(
+              'Update Status',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
           ),
+
           Expanded(
             child: ListView.builder(
               itemCount: taskStatusList.length,
@@ -84,7 +96,7 @@ class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Visibility(
               visible: updateTaskInProgress == false,
               replacement: const Center(
