@@ -6,6 +6,7 @@ import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
 import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
 import 'package:mobile_application/ui/screens/update_profile_screen.dart';
+import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_banner.dart';
@@ -190,80 +191,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   void showEditBottomSheet(TaskData task) {
-    final TextEditingController _titleTEController =
-        TextEditingController(text: task.title);
-    final TextEditingController _descriptionTEController =
-        TextEditingController(text: task.description);
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-    bool _updateTaskInProgress = false;
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Text('Update Task',
-                    style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(
-                  height: 24,
-                ),
-                TextFormField(
-                  textInputAction: TextInputAction.next,
-                  controller: _titleTEController,
-                  decoration: const InputDecoration(hintText: 'Title'),
-                  validator: (String? value) {
-                    if (value?.trim().isEmpty ?? true) {
-                      return 'Please enter title';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                TextFormField(
-                  textInputAction: TextInputAction.done,
-                  controller: _descriptionTEController,
-                  maxLines: 4,
-                  decoration: const InputDecoration(hintText: 'Description'),
-                  validator: (String? value) {
-                    if (value?.trim().isEmpty ?? true) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Visibility(
-                    visible: _updateTaskInProgress == false,
-                    replacement:
-                        const Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                      },
-                      child: const Icon(Icons.arrow_forward_ios_outlined),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return UpdateTaskBottomSheet(task: task, onUpdate: () {
+          getNewTask();
+        },);
       },
     );
   }
