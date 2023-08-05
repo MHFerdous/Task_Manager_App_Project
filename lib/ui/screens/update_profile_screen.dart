@@ -43,8 +43,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              UserProfileBanner(
-                onTap: () {},
+              const UserProfileBanner(
+                isUpdateScreen: true,
               ),
               const SizedBox(
                 height: 30,

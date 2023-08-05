@@ -5,7 +5,6 @@ import 'package:mobile_application/data/models/task_list_model.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
 import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
-import 'package:mobile_application/ui/screens/update_profile_screen.dart';
 import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
 import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
 import '../widgets/summary_card.dart';
@@ -109,16 +108,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            UserProfileBanner(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UpdateProfileScreen(),
-                  ),
-                );
-              },
-            ),
+            const UserProfileBanner(),
             _getCountSummaryInProgress
                 ? const LinearProgressIndicator()
                 : Padding(

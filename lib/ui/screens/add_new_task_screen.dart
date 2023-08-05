@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/network_response.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
-import 'package:mobile_application/ui/screens/update_profile_screen.dart';
 import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
@@ -67,16 +66,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              UserProfileBanner(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UpdateProfileScreen(),
-                    ),
-                  );
-                },
-              ),
+              const UserProfileBanner(),
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: Form(

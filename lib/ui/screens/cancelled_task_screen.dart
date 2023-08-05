@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
-import 'package:mobile_application/ui/screens/update_profile_screen.dart';
 import '../../data/models/network_response.dart';
 import '../../data/services/network_caller.dart';
 import '../../data/utils/urls.dart';
@@ -59,16 +58,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            UserProfileBanner(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UpdateProfileScreen(),
-                  ),
-                );
-              },
-            ),
+            const UserProfileBanner(),
             Expanded(
               child: _getProgressTaskCancelled
                   ? const Center(

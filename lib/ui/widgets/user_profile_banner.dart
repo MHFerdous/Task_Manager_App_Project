@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/auth_utility.dart';
+import 'package:mobile_application/ui/screens/update_profile_screen.dart';
 
 class UserProfileBanner extends StatefulWidget {
-  final VoidCallback onTap;
+  final bool? isUpdateScreen;
 
   const UserProfileBanner({
     super.key,
-    required this.onTap,
+    this.isUpdateScreen,
   });
 
   @override
@@ -16,33 +17,40 @@ class UserProfileBanner extends StatefulWidget {
 class _UserProfileBannerState extends State<UserProfileBanner> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        tileColor: Colors.teal,
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(
-            AuthUtility.userInfo.data?.photo ?? '',
-          ),
-          onBackgroundImageError: (_, __) {
-            const Icon(Icons.image);
-          },
-          radius: 16,
+    return ListTile(
+      onTap: () {
+        if ((widget.isUpdateScreen ?? false) == false) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UpdateProfileScreen(),
+            ),
+          );
+        }
+      },
+      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+      tileColor: Colors.teal,
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(
+          AuthUtility.userInfo.data?.photo ?? '',
         ),
-        title: Text(
-          '${AuthUtility.userInfo.data?.firstName ?? "Couldn't load"} ${AuthUtility.userInfo.data?.lastName ?? ''}',
-          style: const TextStyle(
-            fontSize: 13,
-            color: Colors.white,
-          ),
+        onBackgroundImageError: (_, __) {
+          const Icon(Icons.image);
+        },
+        radius: 16,
+      ),
+      title: Text(
+        '${AuthUtility.userInfo.data?.firstName ?? "Couldn't load"} ${AuthUtility.userInfo.data?.lastName ?? ''}',
+        style: const TextStyle(
+          fontSize: 13,
+          color: Colors.white,
         ),
-        subtitle: Text(
-          AuthUtility.userInfo.data?.email ?? "Couldn't load",
-          style: const TextStyle(
-            fontSize: 11,
-            color: Colors.white,
-          ),
+      ),
+      subtitle: Text(
+        AuthUtility.userInfo.data?.email ?? "Couldn't load",
+        style: const TextStyle(
+          fontSize: 11,
+          color: Colors.white,
         ),
       ),
     );
