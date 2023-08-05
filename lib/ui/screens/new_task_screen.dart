@@ -122,7 +122,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                         itemCount: _summaryCountModel.data?.length ?? 0,
                         itemBuilder: (context, index) {
                           return SummaryCard(
-                            title: _summaryCountModel.data![index].sId ?? 'New',
+                            title: _summaryCountModel.data![index].sId ?? 'new',
                             number: _summaryCountModel.data![index].sum ?? 0,
                           );
                         },
@@ -138,6 +138,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               child: RefreshIndicator(
                 onRefresh: () async {
                   getNewTask();
+                  getCountSummary();
                 },
                 child: _getNewTaskInProgress
                     ? const Center(

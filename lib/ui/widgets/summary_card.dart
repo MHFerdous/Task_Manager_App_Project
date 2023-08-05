@@ -12,7 +12,7 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 80,
+      width: 95,
       child: Card(
         elevation: 5,
         child: Padding(

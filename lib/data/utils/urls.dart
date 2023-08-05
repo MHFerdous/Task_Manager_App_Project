@@ -8,7 +8,7 @@ class Urls {
   static String newTask = '$_baseUrl/listTaskByStatus/New';
   static String inProgressTask = '$_baseUrl/ListTaskByStatus/Progress';
   static String cancelledTask = '$_baseUrl/ListTaskByStatus/Cancelled';
-  static String completedTask = '$_baseUrl/ListTaskByStatus/Complete';
+  static String completedTask = '$_baseUrl/ListTaskByStatus/Completed';
   static String deleteTask(String id) => '$_baseUrl/deleteTask/$id';
   static String emailVerification(String email) =>
       '$_baseUrl/ListTaskByStatus/RecoverVerifyEmail/rabbilidlc@gmail.com';

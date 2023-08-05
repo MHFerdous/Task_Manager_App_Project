@@ -16,7 +16,7 @@ class UpdateTaskStatusSheet extends StatefulWidget {
 }
 
 class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
-  List<String> taskStatusList = ['New', 'Progress', 'Canceled', 'Completed'];
+  List<String> taskStatusList = ['New', 'In Progress', 'Cancelled', 'Completed'];
   late String _selectedTask;
   bool updateTaskInProgress = false;
 
@@ -74,7 +74,7 @@ class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
                     setState(() {});
                   },
                   title: Text(
-                    taskStatusList[index].toUpperCase(),
+                    taskStatusList[index],
                   ),
                   trailing: _selectedTask == taskStatusList[index]
                       ? const Icon(Icons.check_circle_outline)
