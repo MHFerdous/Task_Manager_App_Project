@@ -79,6 +79,8 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                       itemBuilder: (context, index) {
                         return TaskListTile(
                           data: _taskListModel.data![index],
+                          onEditTap: () {},
+                          onDeleteTap: () {},
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) {

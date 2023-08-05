@@ -41,6 +41,26 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
     }
   }
 
+  Future<void> deleteTask(String taskId) async {
+    final NetworkResponse response = await NetworkCaller().getRequest(
+      Urls.deleteTask(taskId),
+    );
+    if (response.isSuccess) {
+      _taskListModel.data!.removeWhere((element) => element.sId == taskId);
+      if (mounted) {
+        setState(() {});
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Task deletion failed'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +97,10 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
                       itemBuilder: (context, index) {
                         return TaskListTile(
                           data: _taskListModel.data![index],
+                          onDeleteTap: () {
+                            deleteTask(_taskListModel.data![index].sId!);
+                          },
+                          onEditTap: () {},
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) {

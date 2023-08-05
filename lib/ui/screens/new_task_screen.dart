@@ -81,6 +81,26 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     }
   }
 
+  Future<void> deleteTask(String taskId) async {
+    final NetworkResponse response = await NetworkCaller().getRequest(
+      Urls.deleteTask(taskId),
+    );
+    if (response.isSuccess) {
+      _taskListModel.data!.removeWhere((element) => element.sId == taskId);
+      if (mounted) {
+        setState(() {});
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Task deletion failed'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,6 +155,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                         itemBuilder: (context, index) {
                           return TaskListTile(
                             data: _taskListModel.data![index],
+                            onDeleteTap: () {
+                              deleteTask(_taskListModel.data![index].sId!);
+                            },
+                            onEditTap: () {
+                              showEditBottomSheet(_taskListModel.data![index]);
+                            },
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {
@@ -160,6 +186,85 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void showEditBottomSheet(TaskData task) {
+    final TextEditingController _titleTEController =
+        TextEditingController(text: task.title);
+    final TextEditingController _descriptionTEController =
+        TextEditingController(text: task.description);
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    bool _updateTaskInProgress = false;
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                Text('Update Task',
+                    style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(
+                  height: 24,
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  controller: _titleTEController,
+                  decoration: const InputDecoration(hintText: 'Title'),
+                  validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter title';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.done,
+                  controller: _descriptionTEController,
+                  maxLines: 4,
+                  decoration: const InputDecoration(hintText: 'Description'),
+                  validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter description';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Visibility(
+                    visible: _updateTaskInProgress == false,
+                    replacement:
+                        const Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                      },
+                      child: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

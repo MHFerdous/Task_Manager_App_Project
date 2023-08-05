@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
 
-class TaskListTile extends StatefulWidget {
+class TaskListTile extends StatelessWidget {
+  final VoidCallback onDeleteTap, onEditTap;
   const TaskListTile({
     super.key,
     required this.data,
+    required this.onDeleteTap,
+    required this.onEditTap,
   });
   final TaskData data;
 
-  @override
-  State<TaskListTile> createState() => _TaskListTileState();
-}
-
-class _TaskListTileState extends State<TaskListTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
-        title: Text(widget.data.title ?? 'Unknown'),
+        title: Text(data.title ?? 'Unknown'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.data.description ?? ''),
-            Text(widget.data.createdDate ?? ''),
+            Text(data.description ?? ''),
+            Text(data.createdDate ?? ''),
             Row(
               children: [
                 Chip(
                   label: Text(
-                    widget.data.status ?? 'New',
+                    data.status ?? 'New',
                     style: const TextStyle(
                       color: Colors.white,
                     ),
@@ -37,14 +35,14 @@ class _TaskListTileState extends State<TaskListTile> {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: onEditTap,
                   icon: Icon(
                     Icons.edit,
                     color: Colors.green.shade500,
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: onDeleteTap,
                   icon: const Icon(
                     Icons.delete_forever_outlined,
                     color: Colors.red,
