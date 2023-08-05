@@ -17,40 +17,61 @@ class UserProfileBanner extends StatefulWidget {
 class _UserProfileBannerState extends State<UserProfileBanner> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        if ((widget.isUpdateScreen ?? false) == false) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const UpdateProfileScreen(),
-            ),
-          );
-        }
-      },
-      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      tileColor: Colors.teal,
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(
-          AuthUtility.userInfo.data?.photo ?? '',
-        ),
-        onBackgroundImageError: (_, __) {
-          const Icon(Icons.image);
+    return AppBar(
+      // contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+      backgroundColor: Colors.teal,
+      title: GestureDetector(
+        onTap: () {
+          if ((widget.isUpdateScreen ?? false) == false) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UpdateProfileScreen(),
+              ),
+            );
+          }
         },
-        radius: 16,
-      ),
-      title: Text(
-        '${AuthUtility.userInfo.data?.firstName ?? "Couldn't load"} ${AuthUtility.userInfo.data?.lastName ?? ''}',
-        style: const TextStyle(
-          fontSize: 13,
-          color: Colors.white,
-        ),
-      ),
-      subtitle: Text(
-        AuthUtility.userInfo.data?.email ?? "Couldn't load",
-        style: const TextStyle(
-          fontSize: 11,
-          color: Colors.white,
+        child: Row(
+          children: [
+            Visibility(
+              visible: (widget.isUpdateScreen ?? false) == false,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      AuthUtility.userInfo.data?.photo ?? '',
+                    ),
+                    onBackgroundImageError: (_, __) {
+                      const Icon(Icons.image);
+                    },
+                    radius: 15,
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${AuthUtility.userInfo.data?.firstName ?? "Couldn't load"} ${AuthUtility.userInfo.data?.lastName ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  AuthUtility.userInfo.data?.email ?? "Couldn't load",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

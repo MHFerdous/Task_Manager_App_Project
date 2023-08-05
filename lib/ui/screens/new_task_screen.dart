@@ -7,6 +7,7 @@ import 'package:mobile_application/data/utils/urls.dart';
 import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
 import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
 import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
+import 'package:mobile_application/ui/widgets/screen_background.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_banner.dart';
@@ -105,7 +106,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: ScreenBackground(
         child: Column(
           children: [
             const UserProfileBanner(),

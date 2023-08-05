@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_application/ui/widgets/screen_background.dart';
 import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
 import '../../data/models/auth_utility.dart';
 import 'auth/login_screen.dart';
@@ -21,24 +21,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future pickImageFromGallery() async {
-    final galleryImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    if (galleryImage == null) {
-      return;
-    }
-    setState(() {
-      _selectedImage = File(galleryImage.path);
-    });
-  }
-
-  File? _selectedImage;
+  XFile? imageFile;
+  ImagePicker picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: ScreenBackground(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,17 +50,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          pickImageFromGallery();
+                      InkWell(
+                        onTap: () {
+                          selectImage();
                         },
-                        child: const Text('Photo'),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                color: Colors.grey,
+                                child: const Text('Photo'),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Visibility(
+                                visible: imageFile != null,
+                                child: Text(imageFile?.name ?? ''),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      _selectedImage != null
-                          ? Image.file(_selectedImage!)
-                          : const Text('data'),
                       const SizedBox(
-                        height: 16,
+                        height: 12,
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.next,
@@ -209,6 +216,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void selectImage() {
+    picker.pickImage(source: ImageSource.gallery).then(
+      (xFile) {
+        if (xFile != null) {
+          imageFile = xFile;
+          if (mounted) {
+            setState(() {});
+          }
+        }
+      },
     );
   }
 }
