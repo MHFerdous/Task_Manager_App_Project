@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
-
 import '../../data/models/network_response.dart';
 import '../../data/services/network_caller.dart';
 import '../../data/utils/urls.dart';
@@ -17,7 +16,7 @@ class UpdateTaskStatusSheet extends StatefulWidget {
 }
 
 class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
-  List<String> taskStatusList = ['new', 'progress', 'cancel', 'completed'];
+  List<String> taskStatusList = ['New', 'Progress', 'Canceled', 'Completed'];
   late String _selectedTask;
   bool updateTaskInProgress = false;
 
