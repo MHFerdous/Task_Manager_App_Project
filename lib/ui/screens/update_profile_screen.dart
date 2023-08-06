@@ -196,7 +196,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         width: double.infinity,
                         height: 42,
                         child: ElevatedButton(
-                          onPressed: () async {
+                          onPressed:
+                              () /* async {
                             await AuthUtility.clearUserInfo();
                             if (mounted) {
                               Navigator.pushAndRemoveUntil(
@@ -205,7 +206,42 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     builder: (context) => const LoginScreen(),
                                   ),
                                   (route) => false);
-                            }
+                            }*/
+                              {
+                            showDialog(
+                              context: context,
+                              // barrierDismissible: false,
+                              //barrierColor: Colors.grey.shade700,
+                              builder: (context) {
+                                return AlertDialog(
+                                  shadowColor: Colors.grey,
+                                  titlePadding: const EdgeInsets.all(10),
+                                  title: const Text('Do you want to logout?'),
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Logout'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('No'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                  contentPadding: const EdgeInsets.all(25),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                );
+                              },
+                            );
                           },
                           child: const Text('Logout'),
                         ),

@@ -119,7 +119,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       width: double.infinity,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        itemCount: _summaryCountModel.data?.length ?? 0,
+                        itemCount: _summaryCountModel.data?.length ?? 4,
                         itemBuilder: (context, index) {
                           return SummaryCard(
                             title: _summaryCountModel.data![index].sId ?? 'new',
