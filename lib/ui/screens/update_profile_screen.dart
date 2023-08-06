@@ -196,46 +196,67 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         width: double.infinity,
                         height: 42,
                         child: ElevatedButton(
-                          onPressed:
-                              () /* async {
-                            await AuthUtility.clearUserInfo();
-                            if (mounted) {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                  (route) => false);
-                            }*/
-                              {
+                          onPressed: () {
                             showDialog(
                               context: context,
-                              // barrierDismissible: false,
-                              //barrierColor: Colors.grey.shade700,
                               builder: (context) {
                                 return AlertDialog(
+                                  elevation: 4,
                                   shadowColor: Colors.grey,
-                                  titlePadding: const EdgeInsets.all(10),
-                                  title: const Text('Do you want to logout?'),
+                                  //titlePadding: const EdgeInsets.all(10),
+                                  title: const Text(
+                                    'Logging out...',
+                                    style: TextStyle(
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  content: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Are you sure?',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
                                   actions: [
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
+                                          onPressed: () async {
+                                            await AuthUtility.clearUserInfo();
+                                            if (mounted) {
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const LoginScreen(),
+                                                  ),
+                                                  (route) => false);
+                                            }
                                           },
-                                          child: const Text('Logout'),
+                                          child: const Text(
+                                            'Yes',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: const Text('No'),
+                                          child: const Text(
+                                            'No',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ],
-                                  contentPadding: const EdgeInsets.all(25),
+                                  contentPadding: const EdgeInsets.all(15),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),

@@ -84,23 +84,75 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   Future<void> deleteTask(String taskId) async {
-    final NetworkResponse response = await NetworkCaller().getRequest(
-      Urls.deleteTask(taskId),
-    );
-    if (response.isSuccess) {
-      _taskListModel.data!.removeWhere((element) => element.sId == taskId);
-      if (mounted) {
-        setState(() {});
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Task deletion failed'),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Deleting...',
+            style: TextStyle(fontSize: 23, fontWeight: FontWeight.normal),
+          ),
+          content: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Are you sure?',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    final NetworkResponse response =
+                        await NetworkCaller().getRequest(
+                      Urls.deleteTask(taskId),
+                    );
+                    if (response.isSuccess) {
+                      _taskListModel.data!
+                          .removeWhere((element) => element.sId == taskId);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    } else {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Task deletion failed'),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text(
+                    'Yes',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'No',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            )
+          ],
+          contentPadding: const EdgeInsets.all(15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
         );
-      }
-    }
+      },
+    );
   }
 
   @override
