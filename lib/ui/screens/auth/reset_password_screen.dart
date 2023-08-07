@@ -3,7 +3,9 @@ import 'package:mobile_application/ui/screens/auth/login_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  final String email, otp;
+  const ResetPasswordScreen({Key? key, required this.email, required this.otp})
+      : super(key: key);
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -92,7 +94,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                      /*  if (!_formKey.currentState!.validate()) {
+                        /*  if (!_formKey.currentState!.validate()) {
                           return;
                         }*/
                         Navigator.pushAndRemoveUntil(

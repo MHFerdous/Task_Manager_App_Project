@@ -10,9 +10,14 @@ class Urls {
   static String cancelledTask = '$_baseUrl/ListTaskByStatus/Cancelled';
   static String completedTask = '$_baseUrl/ListTaskByStatus/Completed';
   static String deleteTask(String id) => '$_baseUrl/deleteTask/$id';
-  static String emailVerification(String email) =>
-      '$_baseUrl/ListTaskByStatus/RecoverVerifyEmail/rabbilidlc@gmail.com';
+  static String updateProfile = '$_baseUrl/profileUpdate';
+
+  static String sendOtpToEmail(String email) =>
+      '$_baseUrl/RecoverVerifyEmail/$email';
+
+  static String verifyOTP(String email, String otp) =>
+      '$_baseUrl/RecoverVerifyEmail/$email/$otp';
+
   static String updateTask(String id, String status) =>
       '$_baseUrl/updateTaskStatus/$id/$status';
-  static String updateProfile = '$_baseUrl/profileUpdate';
 }
