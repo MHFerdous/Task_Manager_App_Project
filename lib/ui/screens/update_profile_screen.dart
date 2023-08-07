@@ -5,6 +5,7 @@ import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 import 'package:mobile_application/ui/widgets/user_profile_AppBar.dart';
 import '../../data/models/auth_utility.dart';
+import '../../data/models/login_model.dart';
 import '../../data/utils/urls.dart';
 import 'auth/login_screen.dart';
 
@@ -16,8 +17,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-
-  final userData = AuthUtility.userInfo.data!;
+  UserData userData = AuthUtility.userInfo.data!;
 
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _firstNameTEController = TextEditingController();
@@ -62,6 +62,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       setState(() {});
     }
     if (response.isSuccess) {
+      userData.firstName = _firstNameTEController.text.trim();
+      userData.lastName = _lastNameTEController.text.trim();
+      userData.mobile = _phoneTEController.text.trim();
+      //AuthUtility.saveUserInfo(userData);
+
       _passwordTEController.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
