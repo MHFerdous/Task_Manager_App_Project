@@ -65,7 +65,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       userData.firstName = _firstNameTEController.text.trim();
       userData.lastName = _lastNameTEController.text.trim();
       userData.mobile = _phoneTEController.text.trim();
-      //AuthUtility.saveUserInfo(userData);
+      AuthUtility.updateUserInfo(userData);
 
       _passwordTEController.clear();
       if (mounted) {
