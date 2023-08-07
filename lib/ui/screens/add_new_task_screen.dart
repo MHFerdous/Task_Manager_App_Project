@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/network_response.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
-import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
+import 'package:mobile_application/ui/widgets/user_profile_AppBar.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({Key? key}) : super(key: key);
@@ -66,7 +66,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const UserProfileBanner(),
+              const UserProfileAppBar(),
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: Form(

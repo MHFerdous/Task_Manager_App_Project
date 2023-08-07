@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_application/data/models/network_response.dart';
+import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
-import 'package:mobile_application/ui/widgets/user_profile_banner.dart';
+import 'package:mobile_application/ui/widgets/user_profile_AppBar.dart';
 import '../../data/models/auth_utility.dart';
+import '../../data/utils/urls.dart';
 import 'auth/login_screen.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -13,6 +16,9 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+
+  final userData = AuthUtility.userInfo.data!;
+
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _firstNameTEController = TextEditingController();
   final TextEditingController _lastNameTEController = TextEditingController();
@@ -27,6 +33,55 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   bool _updateProfileInProgress = false;
 
   @override
+  void initState() {
+    super.initState();
+    _emailTEController.text = userData.email ?? '';
+    _firstNameTEController.text = userData.firstName ?? '';
+    _lastNameTEController.text = userData.lastName ?? '';
+    _phoneTEController.text = userData.mobile ?? '';
+  }
+
+  Future<void> updateProfile() async {
+    _updateProfileInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final Map<String, dynamic> requestBody = {
+      "firstName": _firstNameTEController.text.trim(),
+      "lastName": _lastNameTEController.text.trim(),
+      "mobile": _phoneTEController.text.trim(),
+      "photo": ""
+    };
+    if (_passwordTEController.text.isNotEmpty) {
+      requestBody['password'] = _passwordTEController.text;
+    }
+    final NetworkResponse response =
+        await NetworkCaller().postRequest(Urls.updateProfile, requestBody);
+    _updateProfileInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
+      _passwordTEController.clear();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated successfully'),
+          ),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated failed'),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScreenBackground(
@@ -34,7 +89,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const UserProfileBanner(
+              const UserProfileAppBar(
                 isUpdateScreen: true,
               ),
               const SizedBox(
@@ -85,6 +140,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       TextFormField(
                         textInputAction: TextInputAction.next,
                         controller: _emailTEController,
+                        readOnly: true,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           hintText: 'Email',
@@ -165,29 +221,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Password',
                         ),
-                        validator: (String? value) {
-                          if (value?.trim().isEmpty ?? true) {
+                        /*validator: (String? value) {
+                          if (value?.isEmpty ?? true) {
                             return 'Please enter your password';
                           }
                           if (value!.length < 6) {
                             return 'Password must be at least 6 letters';
                           }
                           return null;
-                        },
+                        },*/
                       ),
                       const SizedBox(
                         height: 16,
                       ),
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                          },
-                          child: const Icon(Icons.arrow_forward_ios_outlined),
-                        ),
+                        child: _updateProfileInProgress
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : ElevatedButton(
+                                onPressed: () {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+                                  updateProfile();
+                                },
+                                child: const Icon(
+                                    Icons.arrow_forward_ios_outlined),
+                              ),
                       ),
                       const SizedBox(
                         height: 30,

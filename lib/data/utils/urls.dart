@@ -14,4 +14,5 @@ class Urls {
       '$_baseUrl/ListTaskByStatus/RecoverVerifyEmail/rabbilidlc@gmail.com';
   static String updateTask(String id, String status) =>
       '$_baseUrl/updateTaskStatus/$id/$status';
+  static String updateProfile = '$_baseUrl/profileUpdate';
 }

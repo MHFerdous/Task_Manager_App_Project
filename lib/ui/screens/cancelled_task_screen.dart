@@ -6,7 +6,7 @@ import '../../data/models/network_response.dart';
 import '../../data/services/network_caller.dart';
 import '../../data/utils/urls.dart';
 import '../widgets/task_list_tile.dart';
-import '../widgets/user_profile_banner.dart';
+import '../widgets/user_profile_AppBar.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
   const CancelledTaskScreen({Key? key}) : super(key: key);
@@ -132,7 +132,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
       body: ScreenBackground(
         child: Column(
           children: [
-            const UserProfileBanner(),
+            const UserProfileAppBar(),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {

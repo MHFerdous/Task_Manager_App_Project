@@ -47,7 +47,7 @@ class _BottomNavBaseScreenState extends State<BottomNavBaseScreen> {
               icon: Icon(Icons.access_time_filled_outlined),
               label: 'In Progress'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.cancel_outlined), label: 'Cancel'),
+              icon: Icon(Icons.cancel_outlined), label: 'Cancelled'),
           BottomNavigationBarItem(
               icon: Icon(Icons.done_outlined), label: 'Completed'),
         ],
