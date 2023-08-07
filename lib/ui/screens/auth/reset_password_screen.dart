@@ -23,105 +23,81 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Scaffold(
       body: ScreenBackground(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 150,
-                  ),
-                  Text(
-                    'Set Password',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                  Text(
-                    'Minimum length password 8 character with letter and number combination',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: Colors.grey),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  TextFormField(
-                    textInputAction: TextInputAction.next,
-                    controller: _passwordTEController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Password',
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 150,
                     ),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your password';
-                      }
-                      if (value!.length < 6) {
-                        return 'Password must be at least 6 letters';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    controller: _confirmPasswordTEController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Confirm Password',
+                    Text(
+                      'Set Password',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    validator: (String? value) {
-                      if (value?.trim().isEmpty ?? true) {
-                        return 'Please enter your password';
-                      }
-                      if (value?.trim() != _passwordTEController.text) {
-                        return 'Password must be same';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        /*  if (!_formKey.currentState!.validate()) {
-                          return;
-                        }*/
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                            (route) => false);
-                      },
-                      child: const Text('Confirm'),
+                    const SizedBox(
+                      height: 7,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Have an account?",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5,
-                        ),
+                    Text(
+                      'Minimum length password 8 character with letter and number combination',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.grey),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _passwordTEController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: 'Password',
                       ),
-                      TextButton(
+                      validator: (String? value) {
+                        if (value?.trim().isEmpty ?? true) {
+                          return 'Please enter your password';
+                        }
+                        if (value!.length < 6) {
+                          return 'Password must be at least 6 letters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      controller: _confirmPasswordTEController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: 'Confirm Password',
+                      ),
+                      validator: (String? value) {
+                        if (value?.trim().isEmpty ?? true) {
+                          return 'Please enter your password';
+                        }
+                        if (value?.trim() != _passwordTEController.text) {
+                          return 'Password must be same';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
                         onPressed: () {
+                          /*  if (!_formKey.currentState!.validate()) {
+                            return;
+                          }*/
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -129,17 +105,43 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               ),
                               (route) => false);
                         },
-                        child: const Text(
-                          'Sign in',
+                        child: const Text('Confirm'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Have an account?",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5,
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                                (route) => false);
+                          },
+                          child: const Text(
+                            'Sign in',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
