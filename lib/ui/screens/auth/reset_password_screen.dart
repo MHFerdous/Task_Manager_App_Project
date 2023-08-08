@@ -3,7 +3,6 @@ import 'package:mobile_application/data/models/network_response.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/ui/screens/auth/login_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
-
 import '../../../data/utils/urls.dart';
 
 class ResetPasswordScreen extends StatefulWidget {

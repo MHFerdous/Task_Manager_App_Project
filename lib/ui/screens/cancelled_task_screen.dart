@@ -79,7 +79,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                 TextButton(
                   onPressed: () async {
                     final NetworkResponse response =
-                    await NetworkCaller().getRequest(
+                        await NetworkCaller().getRequest(
                       Urls.deleteTask(taskId),
                     );
                     if (response.isSuccess) {

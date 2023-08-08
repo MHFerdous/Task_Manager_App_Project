@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_application/data/models/network_response.dart';
-import 'package:mobile_application/data/models/summary_count_model.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
 import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/data/utils/urls.dart';
@@ -10,7 +9,6 @@ import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 import '../../data/models/taskModel.dart';
 import '../widgets/dashBoardItem.dart';
-import '../widgets/summary_card.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_AppBar.dart';
 
@@ -22,9 +20,7 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
-  bool _getCountSummaryInProgress = false, _getNewTaskInProgress = false;
-
-  SummaryCountModel _summaryCountModel = SummaryCountModel();
+  bool _getNewTaskInProgress = false;
 
   TaskListModel _taskListModel = TaskListModel();
   TaskModel taskListModel = TaskModel();
@@ -43,35 +39,44 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   Future<void> statusCount() async {
-    final responseNewTask = await NetworkCaller()
-        .getRequest('https://task.teamrabbil.com/api/v1/listTaskByStatus/New');
+    final responseNewTask =
+        await NetworkCaller().getRequest(Urls.updateNewTask);
     final getNewTaskModel = TaskModel.fromJson(responseNewTask.body!);
 
-    setState(() {
-      count1 = "${getNewTaskModel.data?.length ?? 0}";
-    });
+    setState(
+      () {
+        count1 = "${getNewTaskModel.data?.length ?? 0}";
+      },
+    );
 
-    final responseCancelTask = await NetworkCaller().getRequest(
-        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Cancelled');
-    final getCaneTaskModel = TaskModel.fromJson(responseCancelTask.body!);
-    setState(() {
-      count2 = "${getCaneTaskModel.data?.length ?? 0}";
-    });
+    final responseInProgressTask =
+        await NetworkCaller().getRequest(Urls.updateInProgressTask);
+    final getProgressTaskModel =
+        TaskModel.fromJson(responseInProgressTask.body!);
+    setState(
+      () {
+        count4 = "${getProgressTaskModel.data?.length ?? 0}";
+      },
+    );
 
-    final responseCompletedTask = await NetworkCaller().getRequest(
-        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Completed');
+    final responseCancelledTask =
+        await NetworkCaller().getRequest(Urls.updateCancelledTask);
+    final getCaneTaskModel = TaskModel.fromJson(responseCancelledTask.body!);
+    setState(
+      () {
+        count2 = "${getCaneTaskModel.data?.length ?? 0}";
+      },
+    );
+
+    final responseCompletedTask =
+        await NetworkCaller().getRequest(Urls.updateCompletedTask);
     final getCompletedTaskModel =
         TaskModel.fromJson(responseCompletedTask.body!);
-    setState(() {
-      count3 = "${getCompletedTaskModel.data?.length ?? 0}";
-    });
-
-    final responseProgressTask = await NetworkCaller().getRequest(
-        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Progress');
-    final getProgressTaskModel = TaskModel.fromJson(responseProgressTask.body!);
-    setState(() {
-      count4 = "${getProgressTaskModel.data?.length ?? 0}";
-    });
+    setState(
+      () {
+        count3 = "${getCompletedTaskModel.data?.length ?? 0}";
+      },
+    );
   }
 
   Future<void> getNewTask() async {
@@ -177,72 +182,71 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         child: Column(
           children: [
             const UserProfileAppBar(),
-            Row(
-              children: [
-                Expanded(
-                  child: DashboardItem(
-                    typeOfTask: 'New',
-                    numberOfTask: count1,
-                  ),
-                ),
-                Expanded(
-                  child: DashboardItem(
-                    typeOfTask: 'Completed',
-                    numberOfTask: count3,
-                  ),
-                ),
-                Expanded(
-                  child: DashboardItem(
-                    typeOfTask: 'Cancelled',
-                    numberOfTask: count2,
-                  ),
-                ),
-                Expanded(
-                  child: DashboardItem(
-                    typeOfTask: 'In Progress',
-                    numberOfTask: count4,
-                  ),
-                ),
-              ],
-            ),
-            _getCountSummaryInProgress
-                ? const LinearProgressIndicator()
-                : Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        getNewTask();
-                        statusCount();
-                      },
-                      child: _getNewTaskInProgress
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : ListView.separated(
-                              itemCount: _taskListModel.data?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return TaskListTile(
-                                  data: _taskListModel.data![index],
-                                  onDeleteTap: () {
-                                    deleteTask(
-                                        _taskListModel.data![index].sId!);
-                                  },
-                                  onEditTap: () {
-                                    //showEditBottomSheet(_taskListModel.data![index]);
-                                    showStatueUpdateBottomSheet(
-                                        _taskListModel.data![index]);
-                                  },
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const Divider(
-                                  color: Colors.grey,
-                                  height: 4,
-                                );
-                              },
-                            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: DashBoardItem(
+                      typeOfTask: 'New',
+                      numberOfTask: count1,
                     ),
-                  )
+                  ),
+                  Expanded(
+                    child: DashBoardItem(
+                      typeOfTask: 'In Progress',
+                      numberOfTask: count4,
+                    ),
+                  ),
+                  Expanded(
+                    child: DashBoardItem(
+                      typeOfTask: 'Cancelled',
+                      numberOfTask: count2,
+                    ),
+                  ),
+                  Expanded(
+                    child: DashBoardItem(
+                      typeOfTask: 'Completed',
+                      numberOfTask: count3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  getNewTask();
+                  statusCount();
+                },
+                child: _getNewTaskInProgress
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.separated(
+                        itemCount: _taskListModel.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return TaskListTile(
+                            data: _taskListModel.data![index],
+                            onDeleteTap: () {
+                              deleteTask(_taskListModel.data![index].sId!);
+                            },
+                            onEditTap: () {
+                              //showEditBottomSheet(_taskListModel.data![index]);
+                              showStatueUpdateBottomSheet(
+                                  _taskListModel.data![index]);
+                            },
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(
+                            color: Colors.grey,
+                            height: 4,
+                          );
+                        },
+                      ),
+              ),
+            )
           ],
         ),
       ),

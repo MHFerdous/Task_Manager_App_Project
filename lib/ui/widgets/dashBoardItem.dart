@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-class DashboardItem extends StatelessWidget {
-  const DashboardItem({
+
+class DashBoardItem extends StatelessWidget {
+  const DashBoardItem({
     Key? key,
     required this.typeOfTask,
     this.numberOfTask,
@@ -25,7 +26,9 @@ class DashboardItem extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            FittedBox(child: Text(typeOfTask))
+            FittedBox(
+              child: Text(typeOfTask),
+            )
           ],
         ),
       ),

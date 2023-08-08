@@ -4,7 +4,7 @@ class Urls {
   static String registration = '$_baseUrl/registration';
   static String login = '$_baseUrl/login';
   static String createTask = '$_baseUrl/createTask';
-  static String taskStatusCount = '$_baseUrl/taskStatusCount';
+  //static String taskStatusCount = '$_baseUrl/taskStatusCount';
   static String newTask = '$_baseUrl/listTaskByStatus/New';
   static String inProgressTasks = '$_baseUrl/listTaskByStatus/Progress';
   static String cancelledTask = '$_baseUrl/ListTaskByStatus/Cancelled';
@@ -22,6 +22,11 @@ class Urls {
 
   static String updateTask(String id, String status) =>
       '$_baseUrl/updateTaskStatus/$id/$status';
+
+  static String updateNewTask = '$_baseUrl/listTaskByStatus/New';
+  static String updateInProgressTask = '$_baseUrl/listTaskByStatus/Progress';
+  static String updateCancelledTask = '$_baseUrl/listTaskByStatus/Cancelled';
+  static String updateCompletedTask = '$_baseUrl/listTaskByStatus/Completed';
 }
 
 // https://task.teamrabbil.com/api/v1/listTaskByStatus/Progress
