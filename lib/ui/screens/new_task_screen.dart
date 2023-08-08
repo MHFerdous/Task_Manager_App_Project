@@ -8,7 +8,7 @@ import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
 import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 import '../../data/models/taskModel.dart';
-import '../widgets/dashBoardItem.dart';
+import '../widgets/dash_board_item.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_AppBar.dart';
 

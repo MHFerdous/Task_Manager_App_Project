@@ -16,7 +16,8 @@ class InProgressTaskScreen extends StatefulWidget {
 }
 
 class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
-  bool _getProgressTasksInProgress = false;
+  bool _getInProgressTask = false;
+
   TaskListModel _taskListModel = TaskListModel();
 
   @override
@@ -24,17 +25,16 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        getInProgressTasks();
+        getInProgressTask();
       },
     );
   }
 
-  Future<void> getInProgressTasks() async {
-    _getProgressTasksInProgress = true;
+  Future<void> getInProgressTask() async {
+    _getInProgressTask = true;
     if (mounted) {
       setState(() {});
     }
-
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.inProgressTasks);
     if (response.isSuccess) {
@@ -48,7 +48,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
         );
       }
     }
-    _getProgressTasksInProgress = false;
+    _getInProgressTask = false;
     if (mounted) {
       setState(() {});
     }
@@ -79,7 +79,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
                 TextButton(
                   onPressed: () async {
                     final NetworkResponse response =
-                    await NetworkCaller().getRequest(
+                        await NetworkCaller().getRequest(
                       Urls.deleteTask(taskId),
                     );
                     if (response.isSuccess) {
@@ -136,34 +136,32 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  getInProgressTasks();
+                  getInProgressTask();
                 },
-                child: _getProgressTasksInProgress
+                child: _getInProgressTask
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
                     : ListView.separated(
-                  itemCount: _taskListModel.data?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return TaskListTile(
-                      data: _taskListModel.data![index],
-                      onDeleteTap: () {
-                        deleteTask(_taskListModel.data![index].sId!);
-                      },
-                      onEditTap: () {
-                        //showEditBottomSheet(_taskListModel.data![index]);
-                        showStatueUpdateBottomSheet(
-                            _taskListModel.data![index]);
-                      },
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      color: Colors.grey,
-                      height: 4,
-                    );
-                  },
-                ),
+                        itemCount: _taskListModel.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return TaskListTile(
+                            data: _taskListModel.data![index],
+                            onEditTap: () {
+                              showStatueUpdateBottomSheet(
+                                  _taskListModel.data![index]);
+                            },
+                            onDeleteTap: () {
+                              deleteTask(_taskListModel.data![index].sId!);
+                            },
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(
+                            height: 4,
+                          );
+                        },
+                      ),
               ),
             )
           ],
@@ -180,7 +178,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
         return UpdateTaskStatusSheet(
           task: task,
           onUpdate: () {
-            getInProgressTasks();
+            getInProgressTask();
           },
         );
       },
