@@ -6,7 +6,7 @@ class Urls {
   static String createTask = '$_baseUrl/createTask';
   static String taskStatusCount = '$_baseUrl/taskStatusCount';
   static String newTask = '$_baseUrl/listTaskByStatus/New';
-  static String inProgressTask = '$_baseUrl/ListTaskByStatus/Progress';
+  static String inProgressTasks = '$_baseUrl/listTaskByStatus/Progress';
   static String cancelledTask = '$_baseUrl/ListTaskByStatus/Cancelled';
   static String completedTask = '$_baseUrl/ListTaskByStatus/Completed';
   static String deleteTask(String id) => '$_baseUrl/deleteTask/$id';
@@ -15,9 +15,13 @@ class Urls {
   static String sendOtpToEmail(String email) =>
       '$_baseUrl/RecoverVerifyEmail/$email';
 
-  static String verifyOTP(String email, String otp) =>
-      '$_baseUrl/RecoverVerifyEmail/$email/$otp';
+  static String otpVerify(String email, String otp) =>
+      '$_baseUrl/RecoverVerifyOTP/$email/$otp';
+
+  static String resetPassword = '$_baseUrl/RecoverResetPass';
 
   static String updateTask(String id, String status) =>
       '$_baseUrl/updateTaskStatus/$id/$status';
 }
+
+// https://task.teamrabbil.com/api/v1/listTaskByStatus/Progress

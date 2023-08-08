@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_application/data/models/network_response.dart';
+import 'package:mobile_application/data/services/network_caller.dart';
 import 'package:mobile_application/ui/screens/auth/login_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
+
+import '../../../data/utils/urls.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email, otp;
@@ -17,6 +21,51 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _setPasswordInProgress = false;
+
+  Future<void> resetPassword() async {
+    _setPasswordInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+
+    final Map<String, dynamic> requestBody = {
+      "email": widget.email,
+      "OTP": widget.otp,
+      "password": _passwordTEController.text
+    };
+
+    final NetworkResponse response =
+        await NetworkCaller().postRequest(Urls.resetPassword, requestBody);
+    _setPasswordInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password reset successful'),
+          ),
+        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+            (route) => false);
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password reset failed'),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +103,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _passwordTEController,
-                      obscureText: true,
+                      //obscureText: true,
                       decoration: const InputDecoration(
                         hintText: 'Password',
                       ),
                       validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
+                        if (value?.isEmpty ?? true) {
                           return 'Please enter your password';
                         }
                         if (value!.length < 6) {
@@ -74,15 +123,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     TextFormField(
                       textInputAction: TextInputAction.done,
                       controller: _confirmPasswordTEController,
-                      obscureText: true,
+                      //obscureText: true,
                       decoration: const InputDecoration(
                         hintText: 'Confirm Password',
                       ),
                       validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
+                        if (value?.isEmpty ?? true) {
                           return 'Please enter your password';
-                        }
-                        if (value?.trim() != _passwordTEController.text) {
+                        } else if (value != _passwordTEController.text) {
                           return 'Password must be same';
                         }
                         return null;
@@ -93,19 +141,20 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          /*  if (!_formKey.currentState!.validate()) {
-                            return;
-                          }*/
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                              (route) => false);
-                        },
-                        child: const Text('Confirm'),
+                      child: Visibility(
+                        visible: _setPasswordInProgress == false,
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            }
+                            resetPassword();
+                          },
+                          child: const Text('Confirm'),
+                        ),
                       ),
                     ),
                     const SizedBox(

@@ -5,7 +5,6 @@ import 'package:mobile_application/ui/screens/auth/login_screen.dart';
 import 'package:mobile_application/ui/screens/auth/reset_password_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
 import '../../../data/utils/urls.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -26,33 +25,33 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _otpVerificationInProgress = true;
     if (mounted) {
       setState(() {});
-      final NetworkResponse response = await NetworkCaller().getRequest(
-        Urls.verifyOTP(widget.email, _otpTEController.text),
-      );
-      _otpVerificationInProgress = false;
+    }
+    final NetworkResponse response = await NetworkCaller().getRequest(
+      Urls.otpVerify(widget.email, _otpTEController.text),
+    );
+    _otpVerificationInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
       if (mounted) {
-        setState(() {});
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResetPasswordScreen(
+              email: widget.email,
+              otp: _otpTEController.text,
+            ),
+          ),
+        );
       }
-      if (response.isSuccess) {
-        if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResetPasswordScreen(
-                email: widget.email,
-                otp: _otpTEController.text,
-              ),
-            ),
-          );
-        }
-      }else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('OTP verification failed'),
-            ),
-          );
-        }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('OTP verification failed'),
+          ),
+        );
       }
     }
   }

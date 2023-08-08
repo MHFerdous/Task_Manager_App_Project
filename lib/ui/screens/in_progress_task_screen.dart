@@ -36,7 +36,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
     }
 
     final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.inProgressTask);
+        await NetworkCaller().getRequest(Urls.inProgressTasks);
     if (response.isSuccess) {
       _taskListModel = TaskListModel.fromJson(response.body!);
     } else {
@@ -143,25 +143,27 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
                         child: CircularProgressIndicator(),
                       )
                     : ListView.separated(
-                        itemCount: _taskListModel.data?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return TaskListTile(
-                            data: _taskListModel.data![index],
-                            onDeleteTap: () {
-                              deleteTask(_taskListModel.data![index].sId!);
-                            },
-                            onEditTap: () {
-                              showStatueUpdateBottomSheet(
-                                  _taskListModel.data![index]);
-                            },
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            height: 4,
-                          );
-                        },
-                      ),
+                  itemCount: _taskListModel.data?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return TaskListTile(
+                      data: _taskListModel.data![index],
+                      onDeleteTap: () {
+                        deleteTask(_taskListModel.data![index].sId!);
+                      },
+                      onEditTap: () {
+                        //showEditBottomSheet(_taskListModel.data![index]);
+                        showStatueUpdateBottomSheet(
+                            _taskListModel.data![index]);
+                      },
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      color: Colors.grey,
+                      height: 4,
+                    );
+                  },
+                ),
               ),
             )
           ],

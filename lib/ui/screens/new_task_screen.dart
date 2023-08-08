@@ -8,6 +8,8 @@ import 'package:mobile_application/ui/screens/add_new_task_screen.dart';
 import 'package:mobile_application/ui/screens/update_task_bottom_sheet.dart';
 import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
+import '../../data/models/taskModel.dart';
+import '../widgets/dashBoardItem.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_AppBar.dart';
@@ -25,38 +27,51 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   SummaryCountModel _summaryCountModel = SummaryCountModel();
 
   TaskListModel _taskListModel = TaskListModel();
+  TaskModel taskListModel = TaskModel();
+  dynamic count1;
+  dynamic count2;
+  dynamic count3;
+  dynamic count4;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getCountSummary();
+      statusCount();
       getNewTask();
     });
   }
 
-  Future<void> getCountSummary() async {
-    _getCountSummaryInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.taskStatusCount);
-    if (response.isSuccess) {
-      _summaryCountModel = SummaryCountModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to load summary'),
-          ),
-        );
-      }
-    }
-    _getCountSummaryInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
+  Future<void> statusCount() async {
+    final responseNewTask = await NetworkCaller()
+        .getRequest('https://task.teamrabbil.com/api/v1/listTaskByStatus/New');
+    final getNewTaskModel = TaskModel.fromJson(responseNewTask.body!);
+
+    setState(() {
+      count1 = "${getNewTaskModel.data?.length ?? 0}";
+    });
+
+    final responseCancelTask = await NetworkCaller().getRequest(
+        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Cancelled');
+    final getCaneTaskModel = TaskModel.fromJson(responseCancelTask.body!);
+    setState(() {
+      count2 = "${getCaneTaskModel.data?.length ?? 0}";
+    });
+
+    final responseCompletedTask = await NetworkCaller().getRequest(
+        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Completed');
+    final getCompletedTaskModel =
+        TaskModel.fromJson(responseCompletedTask.body!);
+    setState(() {
+      count3 = "${getCompletedTaskModel.data?.length ?? 0}";
+    });
+
+    final responseProgressTask = await NetworkCaller().getRequest(
+        'https://task.teamrabbil.com/api/v1/listTaskByStatus/Progress');
+    final getProgressTaskModel = TaskModel.fromJson(responseProgressTask.body!);
+    setState(() {
+      count4 = "${getProgressTaskModel.data?.length ?? 0}";
+    });
   }
 
   Future<void> getNewTask() async {
@@ -162,64 +177,72 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         child: Column(
           children: [
             const UserProfileAppBar(),
+            Row(
+              children: [
+                Expanded(
+                  child: DashboardItem(
+                    typeOfTask: 'New',
+                    numberOfTask: count1,
+                  ),
+                ),
+                Expanded(
+                  child: DashboardItem(
+                    typeOfTask: 'Completed',
+                    numberOfTask: count3,
+                  ),
+                ),
+                Expanded(
+                  child: DashboardItem(
+                    typeOfTask: 'Cancelled',
+                    numberOfTask: count2,
+                  ),
+                ),
+                Expanded(
+                  child: DashboardItem(
+                    typeOfTask: 'In Progress',
+                    numberOfTask: count4,
+                  ),
+                ),
+              ],
+            ),
             _getCountSummaryInProgress
                 ? const LinearProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 70,
-                      width: double.infinity,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _summaryCountModel.data?.length ?? 4,
-                        itemBuilder: (context, index) {
-                          return SummaryCard(
-                            title: _summaryCountModel.data![index].sId ?? 'new',
-                            number: _summaryCountModel.data![index].sum ?? 0,
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            height: 4,
-                          );
-                        },
-                      ),
+                : Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        getNewTask();
+                        statusCount();
+                      },
+                      child: _getNewTaskInProgress
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.separated(
+                              itemCount: _taskListModel.data?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return TaskListTile(
+                                  data: _taskListModel.data![index],
+                                  onDeleteTap: () {
+                                    deleteTask(
+                                        _taskListModel.data![index].sId!);
+                                  },
+                                  onEditTap: () {
+                                    //showEditBottomSheet(_taskListModel.data![index]);
+                                    showStatueUpdateBottomSheet(
+                                        _taskListModel.data![index]);
+                                  },
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const Divider(
+                                  color: Colors.grey,
+                                  height: 4,
+                                );
+                              },
+                            ),
                     ),
-                  ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  getNewTask();
-                  getCountSummary();
-                },
-                child: _getNewTaskInProgress
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.separated(
-                        itemCount: _taskListModel.data?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return TaskListTile(
-                            data: _taskListModel.data![index],
-                            onDeleteTap: () {
-                              deleteTask(_taskListModel.data![index].sId!);
-                            },
-                            onEditTap: () {
-                              //showEditBottomSheet(_taskListModel.data![index]);
-                              showStatueUpdateBottomSheet(
-                                  _taskListModel.data![index]);
-                            },
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            color: Colors.grey,
-                            height: 4,
-                          );
-                        },
-                      ),
-              ),
-            )
+                  )
           ],
         ),
       ),
