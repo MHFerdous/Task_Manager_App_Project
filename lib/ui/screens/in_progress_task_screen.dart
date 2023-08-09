@@ -44,6 +44,7 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to load in progress task'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -87,6 +88,13 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
                           .removeWhere((element) => element.sId == taskId);
                       if (mounted) {
                         setState(() {});
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Task Deleted successfully'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
                       }
                     } else {
                       if (mounted) {

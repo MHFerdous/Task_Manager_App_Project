@@ -15,10 +15,9 @@ class _BottomNavBaseScreenState extends State<BottomNavBaseScreen> {
   int _selectedScreenIndex = 0;
   final List<Widget> _screens = const [
     NewTaskScreen(),
-    CompletedTaskScreen(),
-    CancelledTaskScreen(),
-
     InProgressTaskScreen(),
+    CancelledTaskScreen(),
+    CompletedTaskScreen(),
   ];
 
   @override
@@ -46,11 +45,11 @@ class _BottomNavBaseScreenState extends State<BottomNavBaseScreen> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.access_time_filled_outlined),
-              label: 'Completed'),
+              label: 'In Progress'),
           BottomNavigationBarItem(
               icon: Icon(Icons.cancel_outlined), label: 'Cancelled'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.done_outlined), label: 'progress'),
+              icon: Icon(Icons.done_outlined), label: 'Completed'),
         ],
       ),
     );

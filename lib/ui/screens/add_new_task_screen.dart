@@ -43,6 +43,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Task added successfully'),
+            backgroundColor: Colors.green,
           ),
         );
         Navigator.pop(context);
@@ -52,6 +53,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Task adding failed'),
+            backgroundColor: Colors.red,
           ),
         );
       }

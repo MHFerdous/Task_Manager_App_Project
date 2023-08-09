@@ -93,6 +93,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to load new task'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -137,13 +138,21 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       if (mounted) {
                         setState(() {});
                         Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Task Deleted successfully'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
                       }
+
 
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Task deletion failed'),
+                            backgroundColor: Colors.red,
                           ),
                         );
                       }

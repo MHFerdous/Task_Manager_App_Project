@@ -43,11 +43,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ),
           ),
         );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('OTP sent to your email'),
+            backgroundColor: Colors.green,
+          ),
+        );
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Incorrect email or email verification failed'),
+              backgroundColor: Colors.red,
             ),
           );
         }

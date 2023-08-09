@@ -51,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Registration Successfully Done'),
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -59,6 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Registration Failed'),
+            backgroundColor: Colors.red,
           ),
         );
       }

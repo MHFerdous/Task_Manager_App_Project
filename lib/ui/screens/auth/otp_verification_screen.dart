@@ -50,6 +50,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('OTP verification failed'),
+            backgroundColor: Colors.red,
           ),
         );
       }

@@ -72,6 +72,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Profile updated successfully'),
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -226,15 +227,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Password',
                         ),
-                        /*validator: (String? value) {
-                          if (value?.isEmpty ?? true) {
-                            return 'Please enter your password';
-                          }
-                          if (value!.length < 6) {
-                            return 'Password must be at least 6 letters';
-                          }
-                          return null;
-                        },*/
                       ),
                       const SizedBox(
                         height: 16,
@@ -301,6 +293,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                         const LoginScreen(),
                                                   ),
                                                   (route) => false);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text('Logged out'),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
                                             }
                                           },
                                           child: const Text(

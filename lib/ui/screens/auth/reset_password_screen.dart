@@ -46,6 +46,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password reset successful'),
+            backgroundColor: Colors.green,
           ),
         );
         Navigator.pushAndRemoveUntil(
@@ -60,6 +61,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password reset failed'),
+            backgroundColor: Colors.red,
           ),
         );
       }

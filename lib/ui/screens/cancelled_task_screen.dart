@@ -87,12 +87,20 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                           .removeWhere((element) => element.sId == taskId);
                       if (mounted) {
                         setState(() {});
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Task Deleted successfully'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
                       }
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Task deletion failed'),
+                            backgroundColor: Colors.red,
                           ),
                         );
                       }

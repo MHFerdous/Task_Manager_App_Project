@@ -49,12 +49,20 @@ class _LoginScreenState extends State<LoginScreen> {
               builder: (context) => const BottomNavBaseScreen(),
             ),
             (route) => false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logged in successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Incorrect email or password'),
+            backgroundColor: Colors.red,
           ),
         );
       }

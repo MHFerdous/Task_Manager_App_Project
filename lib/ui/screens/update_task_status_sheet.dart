@@ -18,9 +18,9 @@ class UpdateTaskStatusSheet extends StatefulWidget {
 class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
   List<String> taskStatusList = [
     'New',
-    'Completed',
+    'in Progress',
     'Cancelled',
-    ' in Progress'
+    'Completed'
   ];
   late String _selectedTask;
   bool updateTaskInProgress = false;
@@ -47,12 +47,19 @@ class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
       widget.onUpdate();
       if (mounted) {
         Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Status updated successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Status update failed'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -75,7 +82,6 @@ class _UpdateTaskStatusSheetState extends State<UpdateTaskStatusSheet> {
               ),
             ),
           ),
-
           Expanded(
             child: ListView.builder(
               itemCount: taskStatusList.length,
