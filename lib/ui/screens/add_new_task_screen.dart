@@ -45,6 +45,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
             content: Text('Task added successfully'),
           ),
         );
+        Navigator.pop(context);
       }
     } else {
       if (mounted) {

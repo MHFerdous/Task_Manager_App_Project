@@ -136,7 +136,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           .removeWhere((element) => element.sId == taskId);
                       if (mounted) {
                         setState(() {});
+                        Navigator.pop(context);
                       }
+
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
