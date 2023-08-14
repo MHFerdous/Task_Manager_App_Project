@@ -19,6 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  //LoginController loginController = Get.find<LoginController>();
+
   /*final LoginController loginController = Get.put<LoginController>(
     LoginController(),
   );*/

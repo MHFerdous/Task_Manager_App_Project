@@ -7,7 +7,7 @@ import '../../data/utils/urls.dart';
 
 class LoginController extends GetxController {
   bool _logInInProgress = false;
-  bool get loginInProgress => false;
+  bool get loginInProgress => _logInInProgress;
   Future<bool> login(String email, String password) async {
     _logInInProgress = true;
     update();

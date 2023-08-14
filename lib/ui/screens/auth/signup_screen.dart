@@ -22,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _signUpInProgress = false;
 
-  Future<void> userSignUp() async {
+  Future<void> userSignUp() async{
     _signUpInProgress = true;
     if (mounted) {
       setState(() {});
