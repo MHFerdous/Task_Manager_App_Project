@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_application/data/models/auth_utility.dart';
-import 'package:mobile_application/data/models/login_model.dart';
-import 'package:mobile_application/data/models/network_response.dart';
-import 'package:mobile_application/data/services/network_caller.dart';
-import 'package:mobile_application/data/utils/urls.dart';
+import 'package:get/get.dart';
 import 'package:mobile_application/ui/screens/auth/signup_screen.dart';
 import 'package:mobile_application/ui/screens/bottom_nav_base_screen.dart';
 import 'package:mobile_application/ui/screens/email_verification_screen.dart';
+import 'package:mobile_application/ui/state_managers/login_controller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,7 +19,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _logInInProgress = false;
+  /*final LoginController loginController = Get.put<LoginController>(
+    LoginController(),
+  );*/
+
+  /*bool _logInInProgress = false;
 
   Future<void> login() async {
     _logInInProgress = true;
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -131,24 +132,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Visibility(
-                          visible: _logInInProgress == false,
-                          replacement: const Center(
-                            child: CircularProgressIndicator(),
+                      GetBuilder<LoginController>(builder: (loginController) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: Visibility(
+                            visible: loginController.loginInProgress == false,
+                            replacement: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                loginController
+                                    .login(_emailTEController.text.trim(),
+                                        _passwordTEController.text)
+                                    .then((result) {
+                                  if (result == true) {
+                                    Get.snackbar('Successful!',
+                                        'Logged in successfully');
+                                    Get.offAll(
+                                      const BottomNavBaseScreen(),
+                                    );
+                                  } else {
+                                    Get.snackbar('Failed!',
+                                        'Incorrect email or password');
+                                  }
+                                });
+                              },
+                              child:
+                                  const Icon(Icons.arrow_forward_ios_outlined),
+                            ),
                           ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-                              login();
-                            },
-                            child: const Icon(Icons.arrow_forward_ios_outlined),
-                          ),
-                        ),
-                      ),
+                        );
+                      }),
                       const SizedBox(
                         height: 16,
                       ),
