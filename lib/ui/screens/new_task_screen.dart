@@ -32,10 +32,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      statusCount();
-      getNewTask();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        statusCount();
+        getNewTask();
+      },
+    );
   }
 
   Future<void> statusCount() async {
@@ -145,8 +147,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           ),
                         );
                       }
-
-
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(

@@ -131,7 +131,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              otpVerificationController.verifyOTP().then(
+                              otpVerificationController
+                                  .verifyOTP(widget.email,
+                                      _otpTEController.text.trim())
+                                  .then(
                                 (result) {
                                   if (result == true) {
                                     Get.to(

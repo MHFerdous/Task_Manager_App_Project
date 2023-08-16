@@ -16,18 +16,18 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  //bool _getProgressTaskCancelled = false;
-
-  final TaskListModel _taskListModel = TaskListModel();
-  CancelledTaskController cancelledTaskController =
+  final CancelledTaskController cancelledTaskController =
       Get.find<CancelledTaskController>();
+
+  final DeleteTaskController deleteTaskController =
+      Get.find<DeleteTaskController>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        CancelledTaskController;
+      (_) {
+        cancelledTaskController.getCancelledTask();
       },
     );
   }
@@ -143,113 +143,128 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
         child: Column(
           children: [
             const UserProfileAppBar(),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  CancelledTaskController;
-                },
-                child: cancelledTaskController.getProgressTaskCancelled
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.separated(
-                        itemCount: _taskListModel.data?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return TaskListTile(
-                            data: _taskListModel.data![index],
-                            onEditTap: () {
-                              showStatueUpdateBottomSheet(
-                                  _taskListModel.data![index]);
-                            },
-                            onDeleteTap: () {
-                              //deleteTask(_taskListModel.data![index].sId!);
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                      'Deleting...',
-                                      style: TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    content: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Are you sure?',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          GetBuilder<DeleteTaskController>(
-                                            builder: (deleteTaskController) {
-                                              return TextButton(
-                                                onPressed: () {
-                                                  deleteTaskController
-                                                      .deleteTask(_taskListModel
-                                                          .data![index].sId!)
-                                                      .then(
-                                                    (result) {
-                                                      if (result == true) {
-                                                        Get.snackbar('Success!',
-                                                            'Task Deleted successfully');
-                                                        Get.back();
-                                                      } else {
-                                                        Get.snackbar('Failed!',
-                                                            'Task deletion failed');
-                                                      }
-                                                    },
-                                                  );
-                                                },
-                                                child: const Text(
-                                                  'Yes',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            child: const Text(
-                                              'No',
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                    contentPadding: const EdgeInsets.all(15),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  );
+            GetBuilder<CancelledTaskController>(
+              builder: (cancelledTaskController) {
+                if (cancelledTaskController.getProgressTaskCancelled) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      cancelledTaskController.getCancelledTask();
+                    },
+                    child: cancelledTaskController.getProgressTaskCancelled
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.separated(
+                            itemCount: cancelledTaskController
+                                    .taskListModel.data?.length ??
+                                0,
+                            itemBuilder: (context, index) {
+                              return TaskListTile(
+                                data: cancelledTaskController
+                                    .taskListModel.data![index],
+                                onEditTap: () {
+                                  showStatueUpdateBottomSheet(
+                                      cancelledTaskController
+                                          .taskListModel.data![index]);
+                                },
+                                onDeleteTap: () {
+                                  //deleteTask(_taskListModel.data![index].sId!);
+
+                                  deleteTask(index);
                                 },
                               );
                             },
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            height: 4,
-                          );
-                        },
-                      ),
-              ),
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const Divider(
+                                height: 4,
+                              );
+                            },
+                          ),
+                  ),
+                );
+              },
             )
           ],
         ),
       ),
+    );
+  }
+
+  void deleteTask(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Deleting...',
+            style: TextStyle(fontSize: 23, fontWeight: FontWeight.normal),
+          ),
+          content: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Are you sure?',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GetBuilder<DeleteTaskController>(
+                  builder: (deleteTaskController) {
+                    return TextButton(
+                      onPressed: () {
+                        deleteTaskController
+                            .deleteTask(cancelledTaskController
+                                .taskListModel.data![index].sId!)
+                            .then(
+                          (result) {
+                            cancelledTaskController.getProgressTaskCancelled;
+                            if (result == true) {
+                              Get.back();
+                              Get.snackbar(
+                                  'Success!', 'Task Deleted successfully');
+                            } else {
+                              Get.snackbar('Failed!', 'Task deletion failed');
+                            }
+                          },
+                        );
+                      },
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    'No',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            )
+          ],
+          contentPadding: const EdgeInsets.all(15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        );
+      },
     );
   }
 
