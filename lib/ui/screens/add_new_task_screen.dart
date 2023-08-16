@@ -136,9 +136,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                       .then(
                                     (result) {
                                       if (result == true) {
+                                        Get.back();
                                         Get.snackbar(
                                             'Success!', 'New task added');
-                                        Get.back();
                                       } else {
                                         Get.snackbar(
                                             'Fail!', 'Task adding failed');

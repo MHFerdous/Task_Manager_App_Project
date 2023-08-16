@@ -19,8 +19,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   final CancelledTaskController cancelledTaskController =
       Get.find<CancelledTaskController>();
 
-  final DeleteTaskController deleteTaskController =
-      Get.find<DeleteTaskController>();
+
 
   @override
   void initState() {

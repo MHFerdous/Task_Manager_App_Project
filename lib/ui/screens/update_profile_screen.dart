@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile_application/data/models/network_response.dart';
-import 'package:mobile_application/data/services/network_caller.dart';
+import 'package:mobile_application/ui/state_managers/update_profile_controller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
 import 'package:mobile_application/ui/widgets/user_profile_AppBar.dart';
 import '../../data/models/auth_utility.dart';
 import '../../data/models/login_model.dart';
-import '../../data/utils/urls.dart';
 import 'auth/login_screen.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -30,7 +29,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   XFile? imageFile;
   ImagePicker picker = ImagePicker();
 
-  bool _updateProfileInProgress = false;
+  //bool _updateProfileInProgress = false;
 
   @override
   void initState() {
@@ -41,7 +40,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _phoneTEController.text = userData.mobile ?? '';
   }
 
-  Future<void> updateProfile() async {
+  /* Future<void> updateProfile() async {
     _updateProfileInProgress = true;
     if (mounted) {
       setState(() {});
@@ -85,7 +84,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         );
       }
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -231,22 +230,55 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: _updateProfileInProgress
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ElevatedButton(
-                                onPressed: () {
-                                  if (!_formKey.currentState!.validate()) {
-                                    return;
-                                  }
-                                  updateProfile();
-                                },
-                                child: const Icon(
-                                    Icons.arrow_forward_ios_outlined),
-                              ),
+                      GetBuilder<UpdateProfileController>(
+                        builder: (updateProfileController) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: updateProfileController
+                                    .updateProfileInProgress
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      if (!_formKey.currentState!.validate()) {
+                                        return;
+                                      }
+
+                                      updateProfileController
+                                          .updateProfile(
+                                        _firstNameTEController.text.trim(),
+                                        _lastNameTEController.text.trim(),
+                                        _phoneTEController.text.trim(),
+                                        _passwordTEController.text,
+                                      )
+                                          .then(
+                                        (result) {
+                                          if (result == true) {
+                                            userData.firstName =
+                                                _firstNameTEController.text
+                                                    .trim();
+                                            userData.lastName =
+                                                _lastNameTEController.text
+                                                    .trim();
+                                            userData.mobile =
+                                                _phoneTEController.text.trim();
+                                            AuthUtility.updateUserInfo(
+                                                userData);
+
+                                            _passwordTEController.clear();
+
+                                            Get.snackbar('Success!',
+                                                'Profile updated successfully');
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: const Icon(
+                                        Icons.arrow_forward_ios_outlined),
+                                  ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 30,
@@ -311,7 +343,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Get.back();
                                           },
                                           child: const Text(
                                             'No',
