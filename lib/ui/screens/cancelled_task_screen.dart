@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile_application/data/models/task_list_model.dart';
 import 'package:mobile_application/ui/screens/update_task_status_sheet.dart';
+import 'package:mobile_application/ui/state_managers/cancelled_task_controller.dart';
+import 'package:mobile_application/ui/state_managers/delete_task_controller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
-import '../../data/models/network_response.dart';
-import '../../data/services/network_caller.dart';
-import '../../data/utils/urls.dart';
 import '../widgets/task_list_tile.dart';
 import '../widgets/user_profile_AppBar.dart';
 
@@ -16,21 +16,23 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  bool _getProgressTaskCancelled = false;
+  //bool _getProgressTaskCancelled = false;
 
-  TaskListModel _taskListModel = TaskListModel();
+  final TaskListModel _taskListModel = TaskListModel();
+  CancelledTaskController cancelledTaskController =
+      Get.find<CancelledTaskController>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        getCancelledTask();
+        CancelledTaskController;
       },
     );
   }
 
-  Future<void> getCancelledTask() async {
+/*  Future<void> getCancelledTask() async {
     _getProgressTaskCancelled = true;
     if (mounted) {
       setState(() {});
@@ -52,9 +54,9 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
     if (mounted) {
       setState(() {});
     }
-  }
+  }*/
 
-  Future<void> deleteTask(String taskId) async {
+/*  Future<void> deleteTask(String taskId) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -115,7 +117,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: const Text(
                     'No',
@@ -132,7 +134,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
         );
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -144,9 +146,9 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  getCancelledTask();
+                  CancelledTaskController;
                 },
-                child: _getProgressTaskCancelled
+                child: cancelledTaskController.getProgressTaskCancelled
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -160,7 +162,80 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                                   _taskListModel.data![index]);
                             },
                             onDeleteTap: () {
-                              deleteTask(_taskListModel.data![index].sId!);
+                              //deleteTask(_taskListModel.data![index].sId!);
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'Deleting...',
+                                      style: TextStyle(
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    content: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Are you sure?',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          GetBuilder<DeleteTaskController>(
+                                            builder: (deleteTaskController) {
+                                              return TextButton(
+                                                onPressed: () {
+                                                  deleteTaskController
+                                                      .deleteTask(_taskListModel
+                                                          .data![index].sId!)
+                                                      .then(
+                                                    (result) {
+                                                      if (result == true) {
+                                                        Get.snackbar('Success!',
+                                                            'Task Deleted successfully');
+                                                        Get.back();
+                                                      } else {
+                                                        Get.snackbar('Failed!',
+                                                            'Task deletion failed');
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  'Yes',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Text(
+                                              'No',
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                    contentPadding: const EdgeInsets.all(15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  );
+                                },
+                              );
                             },
                           );
                         },
@@ -186,7 +261,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
         return UpdateTaskStatusSheet(
           task: task,
           onUpdate: () {
-            getCancelledTask();
+            CancelledTaskController;
           },
         );
       },

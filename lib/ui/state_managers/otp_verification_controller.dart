@@ -7,11 +7,11 @@ class OtpVerificationController extends GetxController {
   bool _otpVerificationInProgress = false;
   bool get otpVerificationInProgress => _otpVerificationInProgress;
 
-  Future<bool> verifyOTP() async {
+  Future<bool> verifyOTP(String email, String otp) async {
     _otpVerificationInProgress = true;
     update();
     final NetworkResponse response = await NetworkCaller().getRequest(
-      Urls.otpVerify(widget.email, _otpTEController.text),
+      Urls.otpVerify(email, otp),
     );
     _otpVerificationInProgress = false;
     update();

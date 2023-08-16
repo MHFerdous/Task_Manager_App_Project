@@ -28,5 +28,3 @@ class Urls {
   static String updateCancelledTask = '$_baseUrl/listTaskByStatus/Cancelled';
   static String updateCompletedTask = '$_baseUrl/listTaskByStatus/Completed';
 }
-
-// https://task.teamrabbil.com/api/v1/listTaskByStatus/Progress

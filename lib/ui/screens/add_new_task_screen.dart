@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_application/data/models/network_response.dart';
-import 'package:mobile_application/data/services/network_caller.dart';
-import 'package:mobile_application/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:mobile_application/ui/state_managers/add_new_task_controller.dart';
 import 'package:mobile_application/ui/widgets/user_profile_AppBar.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
@@ -16,7 +15,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _descriptionTEController =
       TextEditingController();
 
-  bool _addNewTaskInProgress = false;
+/*  bool _addNewTaskInProgress = false;
 
   Future<void> addNewTask() async {
     _addNewTaskInProgress = true;
@@ -58,7 +57,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         );
       }
     }
-  }
+  }*/
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -115,22 +114,44 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Visibility(
-                          visible: _addNewTaskInProgress == false,
-                          replacement:
-                              const Center(child: CircularProgressIndicator()),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-                              addNewTask();
-                            },
-                            child: const Icon(Icons.arrow_forward_ios_outlined),
-                          ),
-                        ),
+                      GetBuilder<AddNewTaskController>(
+                        builder: (addNewTaskController) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: Visibility(
+                              visible:
+                                  addNewTaskController.addNewTaskInProgress ==
+                                      false,
+                              replacement: const Center(
+                                  child: CircularProgressIndicator()),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+                                  addNewTaskController
+                                      .addNewTask(
+                                          _titleTEController.text.trim(),
+                                          _descriptionTEController.text.trim())
+                                      .then(
+                                    (result) {
+                                      if (result == true) {
+                                        Get.snackbar(
+                                            'Success!', 'New task added');
+                                        Get.back();
+                                      } else {
+                                        Get.snackbar(
+                                            'Fail!', 'Task adding failed');
+                                      }
+                                    },
+                                  );
+                                },
+                                child: const Icon(
+                                    Icons.arrow_forward_ios_outlined),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
