@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_application/data/models/network_response.dart';
-import 'package:mobile_application/data/services/network_caller.dart';
+import 'package:get/get.dart';
 import 'package:mobile_application/ui/screens/auth/login_screen.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
-import '../../../data/utils/urls.dart';
+import '../../state_managers/reset_password_controller.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email, otp;
@@ -21,10 +20,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _setPasswordInProgress = false;
+/*  bool _resetPasswordInProgress = false;
 
   Future<void> resetPassword() async {
-    _setPasswordInProgress = true;
+    _resetPasswordInProgress = true;
     if (mounted) {
       setState(() {});
     }
@@ -37,7 +36,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     final NetworkResponse response =
         await NetworkCaller().postRequest(Urls.resetPassword, requestBody);
-    _setPasswordInProgress = false;
+    _resetPasswordInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -66,7 +65,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         );
       }
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -140,23 +139,33 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Visibility(
-                        visible: _setPasswordInProgress == false,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                            resetPassword();
-                          },
-                          child: const Text('Confirm'),
-                        ),
-                      ),
+                    GetBuilder<ResetPasswordController>(
+                      builder: (resetPasswordController) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: Visibility(
+                            visible: resetPasswordController
+                                    .resetPasswordInProgress ==
+                                false,
+                            replacement: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                Get.snackbar('Success!',
+                                    'Password reset successfully done');
+                                Get.offAll(
+                                  const LoginScreen(),
+                                );
+                              },
+                              child: const Text('Confirm'),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(
                       height: 16,
@@ -173,13 +182,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
+                            Get.offAll(
+                              const LoginScreen(),
+                            );
+                          },
+                          /*Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const LoginScreen(),
                                 ),
                                 (route) => false);
-                          },
+                          },*/
                           child: const Text(
                             'Sign in',
                             style: TextStyle(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_application/data/services/network_caller.dart';
+import 'package:get/get.dart';
+import 'package:mobile_application/ui/state_managers/signup_controller.dart';
 import 'package:mobile_application/ui/widgets/screen_background.dart';
-import '../../../data/models/network_response.dart';
-import '../../../data/utils/urls.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _signUpInProgress = false;
+  /* bool _signUpInProgress = false;
 
   Future<void> userSignUp() async{
     _signUpInProgress = true;
@@ -65,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
       }
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -185,23 +184,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Visibility(
-                        visible: _signUpInProgress == false,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                            userSignUp();
-                          },
-                          child: const Icon(Icons.arrow_forward_ios_outlined),
-                        ),
-                      ),
+                    GetBuilder<SignUpController>(
+                      builder: (signUpController) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: Visibility(
+                            visible: signUpController.signUpProgress == false,
+                            replacement: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                signUpController
+                                    .userSignUp(
+                                        _emailTEController.text.trim(),
+                                        _firstNameTEController.text.trim(),
+                                        _lastNameTEController.text.trim(),
+                                        _phoneTEController.text.trim(),
+                                        _passwordTEController.text)
+                                    .then(
+                                  (result) {
+                                    if (result == true) {
+                                      Get.snackbar('Successful!',
+                                          'SignUp successfully done');
+                                      _emailTEController.clear();
+                                      _firstNameTEController.clear();
+                                      _lastNameTEController.clear();
+                                      _phoneTEController.clear();
+                                      _passwordTEController.clear();
+                                    } else {
+                                      Get.snackbar('Failed!', 'Sign in failed');
+                                    }
+                                  },
+                                );
+                              },
+                              child:
+                                  const Icon(Icons.arrow_forward_ios_outlined),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(
                       height: 16,

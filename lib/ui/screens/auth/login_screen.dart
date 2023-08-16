@@ -134,54 +134,61 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      GetBuilder<LoginController>(builder: (loginController) {
-                        return SizedBox(
-                          width: double.infinity,
-                          child: Visibility(
-                            visible: loginController.loginInProgress == false,
-                            replacement: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (!_formKey.currentState!.validate()) {
-                                  return;
-                                }
-                                loginController
-                                    .login(_emailTEController.text.trim(),
-                                        _passwordTEController.text)
-                                    .then((result) {
-                                  if (result == true) {
-                                    Get.snackbar('Successful!',
-                                        'Logged in successfully');
-                                    Get.offAll(
-                                      const BottomNavBaseScreen(),
-                                    );
-                                  } else {
-                                    Get.snackbar('Failed!',
-                                        'Incorrect email or password');
+                      GetBuilder<LoginController>(
+                        builder: (loginController) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: Visibility(
+                              visible: loginController.loginInProgress == false,
+                              replacement: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
                                   }
-                                });
-                              },
-                              child:
-                                  const Icon(Icons.arrow_forward_ios_outlined),
+                                  loginController
+                                      .login(_emailTEController.text.trim(),
+                                          _passwordTEController.text)
+                                      .then(
+                                    (result) {
+                                      if (result == true) {
+                                        Get.snackbar('Successful!',
+                                            'Logged in successfully');
+                                        Get.offAll(
+                                          const BottomNavBaseScreen(),
+                                        );
+                                      } else {
+                                        Get.snackbar('Failed!',
+                                            'Incorrect email or password');
+                                      }
+                                    },
+                                  );
+                                },
+                                child: const Icon(
+                                    Icons.arrow_forward_ios_outlined),
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        },
+                      ),
                       const SizedBox(
                         height: 16,
                       ),
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            Navigator.push(
+                            Get.to(
+                              const EmailVerificationScreen(),
+                            );
+                            /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const EmailVerificationScreen(),
                               ),
-                            );
+                            );*/
                           },
                           child: const Text(
                             'Forgot Password?',
@@ -203,12 +210,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Get.to(
+                                const SignUpScreen(),
+                              );
+                              /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const SignUpScreen(),
                                 ),
-                              );
+                              );*/
                             },
                             child: const Text(
                               'Sign up',

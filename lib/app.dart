@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_application/ui/screens/splash_screen.dart';
 import 'package:mobile_application/ui/state_managers/login_controller.dart';
+import 'package:mobile_application/ui/state_managers/signup_controller.dart';
 
 class TaskManagerApp extends StatefulWidget {
   static GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
@@ -84,6 +85,9 @@ class ControllerBinding extends Bindings {
   void dependencies() {
     Get.put<LoginController>(
       LoginController(),
+    );
+    Get.put<SignUpController>(
+      SignUpController(),
     );
   }
 }
